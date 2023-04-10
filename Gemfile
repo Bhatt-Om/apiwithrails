@@ -46,3 +46,9 @@ group :development do
   # gem "spring"
 end
 
+
+gem "devise", "~> 4.9"
+
+gem "doorkeeper", "~> 5.6"
+
+gem 'pry-rails'
