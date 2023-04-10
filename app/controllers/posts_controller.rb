@@ -1,7 +1,9 @@
 class PostsController < ApplicationController
-  before_action :find_post
+  before_action :find_post, only: [ :update, :show, :destroy]
+  before_action :doorkeeper_authorize!
+
   def index
-    @posts = Post.all
+    @posts = current_user.posts.all
     render json: @posts, status: 200
   end
 
@@ -13,11 +15,12 @@ class PostsController < ApplicationController
   end
 
   def new
-    @posts = Post.new
+    @posts = current_user.post.new
   end
 
   def create
-    @post = Post.new(
+    
+    @post = current_user.posts.new(
       title: params[:title],
       content: params[:content],
     )
@@ -29,7 +32,6 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = Post.find_by(id: params[:id])
     if @post.update(title: params[:title], content: params[:content]) 
       render json: @post, status: 200
     else
@@ -47,6 +49,6 @@ class PostsController < ApplicationController
   private
 
   def find_post
-    @post = Post.find_by(id: params[:id])
+    @post = current_user.post.find_by(id: params[:id])
   end
 end
